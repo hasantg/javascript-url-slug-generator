@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>JavaScript URL Slug Generator</title>
+	<style>
+	.element{
+		width: 50%;
+		margin: auto auto;
+		background-color: #ccc;
+		text-align: center;
+		padding-top: 30px;
+		padding-bottom: 30px;
+		font-family: 'Noto Sans', sans-serif;
+	}
+	.element input{
+		width: 80%;
+		padding: 5px;
+		font-size: 20px;
+		margin-bottom: 20px !important;
+	}
+	</style>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Noto+Sans' rel='stylesheet' type='text/css'>
+</head>
+<body>
+
+
+	<div class="element">
+		<h1>JavaScript URL Slug Generator</h1>
+		<p>A very simple implementation to generate instant url slug using JavaScript.</p>
+		<input type="text" class="first"><br />
+		<input type="text" class="second"><br />
+		<small>by <a href="https://www.twitter.com/rakibtg">Hasan</a></small>
+	</div>
+	
+	
+	
+	<script>
+		function strtolower(str) {
+			return (str + '').toLowerCase();
+		}
+		
+		// phpjs.org/functions/str_ireplace/
+		
+		function str_ireplace(search, replace, subject) {
+			var i, k = '';
+			var searchl = 0;
+			var reg;
+
+			var escapeRegex = function(s) {
+				return s.replace(/([\\\^\$*+\[\]?{}.=!:(|)])/g, '\\$1');
+			};
+
+			search += '';
+			searchl = search.length;
+			if (Object.prototype.toString.call(replace) !== '[object Array]') {
+				replace = [replace];
+				if (Object.prototype.toString.call(search) === '[object Array]') {
+					while (searchl > replace.length) {
+						replace[replace.length] = replace[0];
+					}
+				}
+			}
+
+			if (Object.prototype.toString.call(search) !== '[object Array]') {
+				search = [search];
+			}
+			while (search.length > replace.length) {
+				replace[replace.length] = '';
+			}
+
+			if (Object.prototype.toString.call(subject) === '[object Array]') {
+				for (k in subject) {
+					if (subject.hasOwnProperty(k)) {
+						subject[k] = str_ireplace(search, replace, subject[k]);
+					}
+				}
+				return subject;
+			}
+
+			searchl = search.length;
+			for (i = 0; i < searchl; i++) {
+				reg = new RegExp(escapeRegex(search[i]), 'gi');
+				subject = subject.replace(reg, replace[i]);
+			}
+
+			return subject;
+		}
+
+		$(document).ready(function(){
+			$("input.first").on("keyup change", function(){
+				var value = strtolower($(this).val());
+				var value = str_ireplace(" ", "_", value);
+				var value = str_ireplace(".", "_", value);
+				var value = str_ireplace("!", "_", value);
+				var value = str_ireplace("$", "_", value);
+				var value = str_ireplace("+", "", value);
+				var value = str_ireplace("-", "", value);
+				var value = str_ireplace("(", "", value);
+				var value = str_ireplace(")", "", value);
+
+				$("input.second").val( value );
+			});
+		});
+	</script>
+</body>
+</html>
